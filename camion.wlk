@@ -6,6 +6,7 @@ object camion {
 		
 	method cargar(cosa) {
 		cosas.add(cosa)
+		cosa.cambiar()
 	}
 
 	method descargar(cosa) {
@@ -75,10 +76,6 @@ object camion {
 		
 	}
 
-	// method esMasPeligrosoQue(objeto, cosa) {
-	// 	return objeto.nivelPeligrosidad() > cosa.nivelPeligrosidad()
-	// }
-
 	method puedeCircularEnRuta(nivelMaximoPeligrosidad) {
 		return !self.excedidoDePeso() && self.cumpleNivelDePeligrosidad(nivelMaximoPeligrosidad)
 	}
@@ -93,7 +90,74 @@ object camion {
 		return cosa.nivelPeligrosidad() <= nivelMaximo
 	}
 
+	method tieneAlgoQuePesaEntre(min, max) {
+		return cosas.all({ 
+			cosa => self.pesaEntre(cosa, min, max)
+		}) 
+	}
 
+	method pesaEntre(cosa, min, max) {
+		return cosa.peso().between(min, max)
+	}
+
+	method cosaMasPesada() {
+		return cosas.max({
+			cosa => cosa.peso()
+		})
+	}
+
+	method pesos() {
+		return cosas.map({
+			cosa => cosa.peso()
+		})
+	}
+
+	method totalBultos() {
+		return cosas.sum({
+			cosa => cosa.bultos()
+		})
+	}
+
+	method descargarEnAlmacen() {
+		almacen.almacenar(cosas)
+		cosas.clear()
+	}
+
+	method transportar(destino, camino) {
+		
+	}
+}
+
+object almacen {
+	const property zonaAlmacenamiento = #{}
+	var capacidad = 3
+
+	method almacenar(cosas) {
+		zonaAlmacenamiento.addAll(cosas)
+	}
+
+	method totalBultos() {
+		return zonaAlmacenamiento.sum({
+			cosa => cosa.bultos()
+		})
+	}
+	
+	method capacidad(_capacidad) {
+		capacidad = _capacidad
+	}
+
+}
+
+object ruta {
+	method nivelPeligrosidadMaxPermitido() { return 11 } 
+}
+
+object caminos {
+	var property pesoMaxSoportado = 0
+
+	method puedeCircular(transporte) {
+		return transporte.pesoTotal() <= pesoMaxSoportado
+	} 
 }
 
 
