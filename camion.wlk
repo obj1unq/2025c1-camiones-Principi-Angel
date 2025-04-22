@@ -71,14 +71,13 @@ object camion {
 	}
 
 	method objetosMasPeligrososQue(cosa) {
-		return cosas.filter({
-			objeto => self.esMasPeligrosoQue(objeto, cosa)
-		})
+		return self.objetosQueSuperanPeligrosidad(cosa.nivelPeligrosidad())
+		
 	}
 
-	method esMasPeligrosoQue(objeto, cosa) {
-		return objeto.nivelPeligrosidad() > cosa.nivelPeligrosidad()
-	}
+	// method esMasPeligrosoQue(objeto, cosa) {
+	// 	return objeto.nivelPeligrosidad() > cosa.nivelPeligrosidad()
+	// }
 
 	method puedeCircularEnRuta(nivelMaximoPeligrosidad) {
 		return !self.excedidoDePeso() && self.cumpleNivelDePeligrosidad(nivelMaximoPeligrosidad)
