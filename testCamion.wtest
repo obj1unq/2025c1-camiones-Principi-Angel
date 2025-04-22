@@ -1,7 +1,18 @@
 import camion.*
+import cosas.*
 
 describe "testeo de camion" {
   test "camion " {
-    
+    camion.cargar(knightRider)
+    assert.that(camion.todoPesoPar())
+    assert.that(camion.hayAlgunoQuePesa(500))
+    assert.equals(knightRider, camion.elDeNivel(10))
+    assert.equals(1500, camion.pesoTotal())
+    assert.notThat(camion.excedidoDePeso())
+    assert.equals(#{knightRider}, camion.objetosQueSuperanPeligrosidad(9))
+    assert.equals(#{}, camion.objetosQueSuperanPeligrosidad(10))
+    assert.equals(#{}, camion.objetosMasPeligrososQue(knightRider))
+    assert.that(camion.puedeCircularEnRuta(10))
+    assert.notThat(camion.puedeCircularEnRuta(9))
   }
 }
