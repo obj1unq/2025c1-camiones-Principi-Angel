@@ -2,7 +2,7 @@ import cosas.*
 
 object camion {
 	const property cosas = #{}
-	const property pesoCamion = 1000 
+	const property tara = 1000 
 		
 	method cargar(cosa) {
 		cosas.add(cosa)
@@ -44,7 +44,7 @@ object camion {
 	}
 
 	method pesoTotal() {
-		return pesoCamion + self.pesoCarga()
+		return tara + self.pesoCarga()
 	}
 
 	method pesoCarga() {
@@ -118,22 +118,29 @@ object camion {
 		})
 	}
 
-	method descargarEnAlmacen() {
-		almacen.almacenar(cosas)
+	method descargarEn(destino) {
+		destino.almacenar(cosas, self.totalBultos())
 		cosas.clear()
 	}
 
 	method transportar(destino, camino) {
-		
+		self.validarTransporte(destino, camino)
+		self.descargarEn(destino)
+	}
+
+	method validarTransporte(destino, camino) {  
+		destino.validar(self)
+		camino.validar(self)
 	}
 }
 
 object almacen {
 	const property zonaAlmacenamiento = #{}
-	var capacidad = 3
+	var property capacidad = 3
 
-	method almacenar(cosas) {
+	method almacenar(cosas, bultosDescarga) {
 		zonaAlmacenamiento.addAll(cosas)
+		capacidad += bultosDescarga
 	}
 
 	method totalBultos() {
@@ -142,18 +149,39 @@ object almacen {
 		})
 	}
 	
-	method capacidad(_capacidad) {
-		capacidad = _capacidad
+	method validar(transporte) {
+		if ( ! self.hayLugarParaCargaDe(transporte) ) {
+			self.error("destino sin espacio suficiente para albergar carga.")
+		} 
 	}
 
+	method hayLugarParaCargaDe(transporte) {
+		return capacidad >= self.totalBultos() + transporte.totalBultos()
+	}
 }
 
-object ruta {
+object ruta9 {
 	method nivelPeligrosidadMaxPermitido() { return 11 } 
+
+	method validar(transporte) {
+		if (! self.puedeCircular(transporte)) {
+			self.error("no se cumple reglamentación para circular por este camino.")
+		}
+	}
+
+	method puedeCircular(transporte) {
+		return transporte.puedeCircularEnRuta(self.nivelPeligrosidadMaxPermitido()) 
+	} 
 }
 
 object caminos {
-	var property pesoMaxSoportado = 0
+	var property pesoMaxSoportado = 1500
+
+	method validar(transporte) {
+		if (! self.puedeCircular(transporte)) {
+			self.error("no se cumple reglamentación para circular por este camino.")
+		}
+	}
 
 	method puedeCircular(transporte) {
 		return transporte.pesoTotal() <= pesoMaxSoportado

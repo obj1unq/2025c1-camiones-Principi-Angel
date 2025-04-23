@@ -21,11 +21,15 @@ object bumblebee {
 	method transformarA(modo) { transformacion = modo }
 }
 object paqueteDeLadrillos {
-	var property ladrillos = 1 
-	const pesoUnLadrillo   = 2
+	var ladrillos = 1 
+	const pesoUnLadrillo = 2
 
 	method peso() { return pesoUnLadrillo * ladrillos }
 	method nivelPeligrosidad() { return 2 }
+
+	method ladrillos(_ladrillos) {
+		ladrillos = _ladrillos
+	}
 
 	method bultos() {
 		return if (ladrillos.between(1, 100)) 1 
@@ -98,7 +102,7 @@ object contenedorPortuario {
 		})
 	}
 }
-object residuosRadiactivos {
+object residuosRadioactivos {
 	var property peso = 0
 
 	method peso() { return peso }

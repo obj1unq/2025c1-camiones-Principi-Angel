@@ -2,7 +2,7 @@ import camion.*
 import cosas.*
 
 describe "testeo de camion" {
-  test "camion " {
+  test "camion" {
     camion.cargar(knightRider)
     assert.that(camion.todoPesoPar())
     assert.that(camion.hayAlgunoQuePesa(500))
@@ -14,5 +14,17 @@ describe "testeo de camion" {
     assert.equals(#{}, camion.objetosMasPeligrososQue(knightRider))
     assert.that(camion.puedeCircularEnRuta(10))
     assert.notThat(camion.puedeCircularEnRuta(9))
+  }
+
+  test "camion carga residuos radioactivos, no puede ir por ruta, puede ir por caminos vecinales, descarga en el almacen vacío" {
+    camion.cargar(residuosRadioactivos)
+    assert.throwsException({ camion.transportar(almacen, ruta9) })
+    caminos.pesoMaxSoportado(1014)
+    assert.throwsException({ camion.transportar(almacen, caminos) })
+    caminos.pesoMaxSoportado(1015)
+    camion.transportar(almacen, caminos)
+    assert.equals(#{}, camion.cosas())
+    assert.equals(camion.tara(), camion.pesoTotal())
+    assert.equals(#{residuosRadioactivos}, almacen.zonaAlmacenamiento())
   }
 }
