@@ -67,7 +67,7 @@ del almacén se configura en 3, y el camión contiene a Bumblebee y Knight Rider
 
 
 Se pide que el camión entienda el mensaje `transportar(destino, camino)` Donde destino es el almacén (pero se parametriza porque podría
-aparecer otros lugares) y el camino es una de las dos opciones (ruta 9 o caminos vecinales, pero también se debe pensar que pueda haber otros caminos
+aparecer otros lugares) y el camino es una de las dos opciones ruta 9 o caminos vecinales, pero también se debe pensar que pueda haber otros caminos
 polimórficos.
 
 Es importante realizar las validaciones correspondientes.
